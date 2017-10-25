@@ -70,6 +70,51 @@ nav ul li a:visited {
     color: black;
 }
 
+#template {
+    border: 1px solid black;
+    border-radius: 8px;
+    border-bottom-left-radius: 0px;
+    padding: 0px 10px;
+    padding-bottom: 10px;
+    background-color: azure;
+}
+
+#infos {
+    text-align: center;
+}
+
+fieldset {
+    background-color: rgba(158, 247, 131, 0.15);
+    border: 1px solid #000000;
+    border-radius: 8px;
+    border-bottom-right-radius: 0px;    
+}
+
+#textfield {
+    border: 1px solid #000000;
+    border-radius: 8px;
+    margin: 10px;
+}
+
+#textarea {
+    border: 1px solid #000000;
+    border-radius: 8px;
+    width: 100%;
+}
+
+#submit {
+    float: right;
+    padding: 5px 10px;
+    margin-top: 5px;
+    border: 1px solid #000000;
+    border-radius: 8px;
+    background-color: greenyellow;
+}
+
+#submit:hover{
+    background-color: goldenrod;
+}
+
 #footer {
     padding: 10px;
     font-size: 14px;
