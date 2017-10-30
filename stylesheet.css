@@ -83,6 +83,15 @@ nav ul li a:visited {
     text-align: center;
 }
 
+#loading-button {
+    display: block;
+    margin: auto;
+    padding: 10px;
+    background-color: greenyellow;
+    border: 1px solid #000000;
+    border-radius: 8px;
+}
+
 fieldset {
     background-color: rgba(158, 247, 131, 0.15);
     border: 1px solid #000000;
