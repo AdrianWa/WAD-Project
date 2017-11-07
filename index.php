@@ -35,20 +35,27 @@
             global $message;
             global $nameErr;
             global $messageErr;
+            $insertBool1 = $insertBool2 = false;
 
             if($_SERVER["REQUEST_METHOD"] == "POST"){
                 if(empty($_POST["name"])){
                     $nameErr = "Please enter your name!";
                 } else {
                     $name = test_input($_POST["name"]);
-                    echo $name;
+                    $insertBool1 = true;
                 }
                 if(empty($_POST["message"])){
-                    $messageErr = "Please enter your message!";
+                    $messageErr = "Please enter your message!";  
                 } else {
                     $message = test_input($_POST["message"]);
-                    echo $message;
+                    $insertBool2 = true;
                 }
+            }
+
+            if($insertBool1 && $insertBool2){
+                $statement = $pdo->prepare("INSERT INTO guestbook_entries (name, message) VALUES (?, ?)");
+                $statement->execute(array($name, $message));
+                $name = $message = "";
             }
 
 
