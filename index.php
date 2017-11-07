@@ -13,32 +13,43 @@
     <body>
 
         <?php
-        $pdo = new PDO('mysql:host=localhost;dbname=wad-project', 'root', '');
+        $servername = "localhost";
+        $username = 'root';
+        $password = '';
+        $pdo = null;
 
-        $name = $message = "";
-        $nameErr = $messageErr = "";
+        try {
+            global $pdo;
+            $pdo = new PDO('mysql:host=localhost;dbname=wad-project', $username, $password);
 
-        if($_SERVER["REQUEST_METHOD"] == "POST"){
-            if(empty($_POST["name"])){
-                $nameErr = "Please enter your name!";
-            } else {
-                $name = test_input($_POST["name"]);
+            $name = $message = "";
+            $nameErr = $messageErr = "";
+
+            if($_SERVER["REQUEST_METHOD"] == "POST"){
+                if(empty($_POST["name"])){
+                    $nameErr = "Please enter your name!";
+                    echo $nameErr;
+                } else {
+                    $name = test_input($_POST["name"]);
+                }
+                if(empty($_POST["message"])){
+                    $messageErr = "Please enter your message!";
+                    echo $messageErr;
+                } else {
+                    $message = test_input($_POST["messsage"]);
+                }
             }
-            if(empty($_POST["message"])){
-                $nameErr = "Please enter your message!";
-            } else {
-                $message = test_input($_POST["messsage"]);
+
+            function test_input($data) {
+                $data = trim($data);
+                $data = stripslashes($data);
+                $data = htmlspecialchars($data);
+                return $data;
             }
+
+        } catch(PDOException $e){
+            echo "No database connection";
         }
-
-        function test_input($data) {
-            $data = trim($data);
-            $data = stripslashes($data);
-            $data = htmlspecialchars($data);
-            return $data;
-        }
-
-
 
         ?>
 
@@ -68,103 +79,91 @@
             <h1 id="guestbook">My Guestbook</h1>
 
 
-            <div id="template">
-                <p>"Your message"!</p>
-                <div id="infos">posted by NAME on DATE</div>
-            </div>
-            <br>
+            <!--
 
-            <div id="template">
-                <p>"Your message"!</p>
-                <div id="infos">posted by NAME on DATE</div>
-            </div>
-            <br>
+<div id="template">
+<p>"Your message"!</p>
+<div id="infos">posted by NAME on DATE</div>
+</div>
+<br>
 
-            <div id="template">
-                <p>"Your message"!</p>
-                <div id="infos">posted by NAME on DATE</div>
-            </div>
-            <br>
-
-            <div id="template">
-                <p>"Your message"!</p>
-                <div id="infos">posted by NAME on DATE</div>
-            </div>
-            <br>
-
-            <div id="template">
-                <p>"Your message"!</p>
-                <div id="infos">posted by NAME on DATE</div>
-            </div>
-            <br>
+-->
 
             <button id="loading-button">
                 Load more!
             </button>
 
             <?php 
-            //$lastid = $sql->lastInsertId();
-            $sql = "SELECT * from guestbook_entries ORDER BY id DESC LIMIT 10";
-            //echo $lastid;
-            foreach ($pdo->query($sql) as $row) {
-                echo $row['id']." <br />";
-                echo $row['name'].": <br />";    
-                echo $row['message']."<br />";
-                echo "posted on: ";
-                echo $row['time']."<br />";
+            try {
+                //$lastid = $sql->lastInsertId();
+                $sql = "SELECT * from guestbook_entries ORDER BY id DESC LIMIT 10";
+                //echo $lastid;
+                foreach ($pdo->query($sql) as $row) {
+                    echo $row['id']." <br />";
+                    echo $row['name'].": <br />";    
+                    echo $row['message']."<br />";
+                    echo "posted on: ";
+                    echo $row['time']."<br />";
+                }
+            } catch(PDOException $e){
+
             }
 
             ?>
 
             <br>
-                <br>
-                <br>
+            <br>
+            <br>
 
-                <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
+            <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
                 <fieldset>
-                Enter your Nickname:
-            <br>
-                <input type="text" id="textfield" value="<?php echo $name;?>">
-                <br>
-                Enter your message:
-            <br>
-                <textarea id="textarea" rows="10" value="<?php echo $message;?>">
-                </textarea>
-                <br>
-                <input type="submit" id="submit">
+                    Enter your Nickname:
+                    <br>
+                    <input type="text" id="textfield" value="<?php global $name; echo $name;?>">
+                    <span id="error"> <?php global $nameErr; echo $nameErr; ?> </span>
+                    <br>
+                    Enter your message:
+                    <br>
+                    <textarea id="textarea" rows="10" value="<?php global $message; echo $message;?>"></textarea>
+                    <br>
+                    <span id="error"> <?php global $messageErr; echo $messageErr; ?> </span>
+                    <input type="submit" id="submit">
                 </fieldset>
-                </form>
-                <br>
-                <hr>
+            </form>
+            <br>
+            <hr>
 
-                <h1 id="about">About</h1>
+            <h1 id="about">About</h1>
 
-                <!--
-                <form>
-                <textarea name="editor1" id="editor1" rows="10" cols="100">
-                This is my textarea to be replaced with CKEditor.
-                </textarea>
-                <script>
-                // Replace the <textarea id="editor1"> with a CKEditor
-                // instance, using default configuration.
-                CKEDITOR.replace( 'editor1' );
-            </script>
-                </form>
-                -->
+            <!--
+<form>
+<textarea name="editor1" id="editor1" rows="10" cols="100">
+This is my textarea to be replaced with CKEditor.
+</textarea>
+<script>
+// Replace the <textarea id="editor1"> with a CKEditor
+// instance, using default configuration.
+CKEDITOR.replace( 'editor1' );
+</script>
+</form>
+-->
 
-                <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum
+            <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum
 
-                </p>
+            </p>
 
-                <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum
+            <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum
 
-                </p>
+            </p>
 
-                </div>
-
-
-                <div id="footer">Copyright &copy;</div>
+        </div>
 
 
-                    </body>
-                    </html>
+        <div id="footer">Copyright &copy;</div>
+
+        <?php
+        $pdo = null; //close database connection
+        ?>
+
+    </body>
+</html>

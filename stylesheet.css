@@ -103,12 +103,19 @@ fieldset {
     border: 1px solid #000000;
     border-radius: 8px;
     margin: 10px;
+    font-family: inherit;
 }
 
 #textarea {
     border: 1px solid #000000;
     border-radius: 8px;
     width: 100%;
+    font-family: inherit;
+}
+
+form fieldset span {
+    background-color: aqua;
+    color: red;
 }
 
 #submit {
