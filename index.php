@@ -17,35 +17,41 @@
         $username = 'root';
         $password = '';
         $pdo = null;
+        $name = $message = "";
+        $nameErr = $messageErr = "";
+
+        function test_input($data) {
+            $data = trim($data);
+            $data = stripslashes($data);
+            $data = htmlspecialchars($data);
+            return $data;
+        }
 
         try {
             global $pdo;
             $pdo = new PDO('mysql:host=localhost;dbname=wad-project', $username, $password);
 
-            $name = $message = "";
-            $nameErr = $messageErr = "";
+            global $name;
+            global $message;
+            global $nameErr;
+            global $messageErr;
 
             if($_SERVER["REQUEST_METHOD"] == "POST"){
                 if(empty($_POST["name"])){
                     $nameErr = "Please enter your name!";
-                    echo $nameErr;
                 } else {
                     $name = test_input($_POST["name"]);
+                    echo $name;
                 }
                 if(empty($_POST["message"])){
                     $messageErr = "Please enter your message!";
-                    echo $messageErr;
                 } else {
-                    $message = test_input($_POST["messsage"]);
+                    $message = test_input($_POST["message"]);
+                    echo $message;
                 }
             }
 
-            function test_input($data) {
-                $data = trim($data);
-                $data = stripslashes($data);
-                $data = htmlspecialchars($data);
-                return $data;
-            }
+
 
         } catch(PDOException $e){
             echo "No database connection";
@@ -119,14 +125,14 @@
                 <fieldset>
                     Enter your Nickname:
                     <br>
-                    <input type="text" id="textfield" value="<?php global $name; echo $name;?>">
-                    <span id="error"> <?php global $nameErr; echo $nameErr; ?> </span>
+                    <input type="text" name="name" id="textfield" value="<?php global $name; echo $name;?>" placeholder="Please enter your name!">
+                    <span id="error" style="color: red"> <?php global $nameErr; echo $nameErr; ?> </span>
                     <br>
                     Enter your message:
                     <br>
-                    <textarea id="textarea" rows="10" value="<?php global $message; echo $message;?>"></textarea>
+                    <textarea id="textarea" name="message" rows="10" value="<?php global $message; echo $message;?>" placeholder="Please enter your message!"></textarea>
                     <br>
-                    <span id="error"> <?php global $messageErr; echo $messageErr; ?> </span>
+                    <span id="error" style="color: red"> <?php global $messageErr; echo $messageErr; ?> </span>
                     <input type="submit" id="submit">
                 </fieldset>
             </form>
