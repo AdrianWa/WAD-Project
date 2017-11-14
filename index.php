@@ -13,12 +13,14 @@
     <body>
 
         <?php
+        //all global variables
         $servername = "localhost";
         $username = 'root';
         $password = '';
         $pdo = null;
         $name = $message = "";
         $nameErr = $messageErr = "";
+        $amount_entries = 10;       //show 10 entries as standard
 
         function test_input($data) {
             $data = trim($data);
@@ -27,7 +29,13 @@
             return $data;
         }
 
+        function load_entries(){
+            global $amount_entries;
+            $amount_entries += 10;
+        }
+
         try {
+            //open database connection
             global $pdo;
             $pdo = new PDO('mysql:host=localhost;dbname=wad-project', $username, $password);
 
@@ -38,20 +46,25 @@
             $insertBool1 = $insertBool2 = false;
 
             if($_SERVER["REQUEST_METHOD"] == "POST"){
-                if(empty($_POST["name"])){
-                    $nameErr = "Please enter your name!";
+                if($_POST["load"]){
+                    load_entries();
                 } else {
-                    $name = test_input($_POST["name"]);
-                    $insertBool1 = true;
-                }
-                if(empty($_POST["message"])){
-                    $messageErr = "Please enter your message!";  
-                } else {
-                    $message = test_input($_POST["message"]);
-                    $insertBool2 = true;
+                    if(empty($_POST["name"])){
+                        $nameErr = "Please enter your name!";
+                    } else {
+                        $name = test_input($_POST["name"]);
+                        $insertBool1 = true;
+                    }
+                    if(empty($_POST["message"])){
+                        $messageErr = "Please enter your message!";  
+                    } else {
+                        $message = test_input($_POST["message"]);
+                        $insertBool2 = true;
+                    }
                 }
             }
 
+            //adds input to database, if checking was successful
             if($insertBool1 && $insertBool2){
                 $statement = $pdo->prepare("INSERT INTO guestbook_entries (name, message) VALUES (?, ?)");
                 $statement->execute(array($name, $message));
@@ -102,15 +115,11 @@
 
 -->
 
-            <button id="loading-button">
-                Load more!
-            </button>
 
             <?php 
             try {
-                //$lastid = $sql->lastInsertId();
-                $sql = "SELECT * from guestbook_entries ORDER BY id DESC LIMIT 10";
-                //echo $lastid;
+                global $amount_entries;
+                $sql = "SELECT * from guestbook_entries ORDER BY id DESC LIMIT $amount_entries";
                 foreach ($pdo->query($sql) as $row) {
                     echo $row['id']." <br />";
                     echo $row['name'].": <br />";    
@@ -123,6 +132,13 @@
             }
 
             ?>
+
+            <br/>
+
+            <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
+                <input type="submit" id="loading-button" name="load" value="Load more!"/>
+            </form>
+
 
             <br>
             <br>
