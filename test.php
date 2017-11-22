@@ -1,54 +1,70 @@
 <?php
-$servername = "localhost";
-$username = 'root';
-$password = '';
-$pdo = null;
+        //all global variables
+        $servername = "localhost";
+        $username = 'root';
+        $password = '';
+        $pdo = null;
+        $name = $message = "";
+        $nameErr = $messageErr = "";
+        $amount_entries = 10;       //show 10 entries as standard
 
-try {
-    global $pdo;
-    $pdo = new PDO('mysql:host=localhost;dbname=wad-project', $username, $password);
-
-    $name = $message = "";
-    $nameErr = $messageErr = "";
-
-    if($_SERVER["REQUEST_METHOD"] == "POST"){
-        if(empty($_POST["name"])){
-            $nameErr = "Please enter your name!";
-        } else {
-            $name = test_input($_POST["name"]);
+        function test_input($data) {
+            $data = trim($data);
+            $data = stripslashes($data);
+            $data = htmlspecialchars($data);
+            return $data;
         }
-        if(empty($_POST["message"])){
-            $nameErr = "Please enter your message!";
-        } else {
-            $message = test_input($_POST["messsage"]);
+
+        function load_entries(){
+            echo("Jep");
+            global $amount_entries;
+            $amount_entries += 10;
         }
-    }
+
+        try {
+            //open database connection
+            global $pdo;
+            $pdo = new PDO('mysql:host=localhost;dbname=wad-project', $username, $password);
+
+            global $name;
+            global $message;
+            global $nameErr;
+            global $messageErr;
+            $insertBool1 = $insertBool2 = false;
+
+            if($_SERVER["REQUEST_METHOD"] == "POST"){
+                echo("test");
+                if($_POST['action'] == "load"){
+                    echo("Yeah!");
+                    load_entries();
+                } else {
+                    if(empty($_POST["name"])){
+                        $nameErr = "Please enter your name!";
+                    } else {
+                        $name = test_input($_POST["name"]);
+                        $insertBool1 = true;
+                    }
+                    if(empty($_POST["message"])){
+                        $messageErr = "Please enter your message!";  
+                    } else {
+                        $message = test_input($_POST["message"]);
+                        $insertBool2 = true;
+                    }
+                }
+            }
+
+            //adds input to database, if checking was successful
+            if($insertBool1 && $insertBool2){
+                $statement = $pdo->prepare("INSERT INTO guestbook_entries (name, message) VALUES (?, ?)");
+                $statement->execute(array($name, $message));
+                $name = $message = "";
+            }
 
 
-    function test_input($data) {
-        $data = trim($data);
-        $data = stripslashes($data);
-        $data = htmlspecialchars($data);
-        return $data;
-    }
 
-} catch(PDOException $e){
-    echo "No database connection";
-}
+        } catch(PDOException $e){
+            echo "No database connection";
+        }
 
-$sql = "SELECT * from guestbook_entries ORDER BY id DESC LIMIT 10";
-foreach ($pdo->query($sql) as $row) {
-    echo $row['id']." <br />";
-    echo $row['name'].": <br />";    
-    echo $row['message']."<br />";
-    echo "posted on: ";
-    echo $row['time']."<br />";
-}
-$entryname = 'DRACULA';
-$entrymessage = 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.';
-$statement = $pdo->prepare("INSERT INTO guestbook_entries (name, message) VALUES (?, ?)");
-$statement->execute(array($entryname, $entrymessage));
 
-$pdo = null;
-
-?>
+        ?>
