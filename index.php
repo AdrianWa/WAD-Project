@@ -7,7 +7,24 @@
         <link rel="stylesheet"
               href="stylesheet.css">
         <link href="https://fonts.googleapis.com/css?family=Raleway|Roboto" rel="stylesheet">
-        <script src="../ckeditor.js"></script>
+        <!--  <script src="../ckeditor.js"></script>  -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script type="text/javascript">
+            function myAjax(){
+                $.ajax({type : 'POST',
+                        data : {'action': 'load'},
+                        url: 'index.php',
+                        success: function(data){
+                        alert("Nice!");
+                       },
+                        error: function(data){
+                        alert("error");
+                }
+            });
+            }
+
+
+        </script>
     </head>
 
     <body>
@@ -30,6 +47,7 @@
         }
 
         function load_entries(){
+            echo("Jep");
             global $amount_entries;
             $amount_entries += 10;
         }
@@ -46,7 +64,9 @@
             $insertBool1 = $insertBool2 = false;
 
             if($_SERVER["REQUEST_METHOD"] == "POST"){
-                if($_POST["load"]){
+                echo("test");
+                if($_POST['action'] == "load"){
+                    echo("Yeah!");
                     load_entries();
                 } else {
                     if(empty($_POST["name"])){
@@ -76,6 +96,7 @@
         } catch(PDOException $e){
             echo "No database connection";
         }
+
 
         ?>
 
@@ -134,11 +155,13 @@
             ?>
 
             <br/>
+            <!--
+<form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
+<input type="submit" id="loading-button" name="load" value="Load more!"/>
+</form>
+-->
 
-            <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
-                <input type="submit" id="loading-button" name="load" value="Load more!"/>
-            </form>
-
+            <button id="loading-button" onClick="myAjax()">Load more!</button>
 
             <br>
             <br>
