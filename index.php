@@ -11,16 +11,15 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <script type="text/javascript">
             function myAjax(){
-                $.ajax({type : 'POST',
+                $.ajax({type : 'post',
                         data : {'action': 'load'},
-                        url: 'index.php',
+                        url: 'backend.php',
                         success: function(data){
-                        alert("Nice!");
-                       },
+                        },
                         error: function(data){
-                        alert("error");
-                }
-            });
+                            alert("error");
+                        }
+                       });
             }
 
 
@@ -29,76 +28,7 @@
 
     <body>
 
-        <?php
-        //all global variables
-        $servername = "localhost";
-        $username = 'root';
-        $password = '';
-        $pdo = null;
-        $name = $message = "";
-        $nameErr = $messageErr = "";
-        $amount_entries = 10;       //show 10 entries as standard
-
-        function test_input($data) {
-            $data = trim($data);
-            $data = stripslashes($data);
-            $data = htmlspecialchars($data);
-            return $data;
-        }
-
-        function load_entries(){
-            echo("Jep");
-            global $amount_entries;
-            $amount_entries += 10;
-        }
-
-        try {
-            //open database connection
-            global $pdo;
-            $pdo = new PDO('mysql:host=localhost;dbname=wad-project', $username, $password);
-
-            global $name;
-            global $message;
-            global $nameErr;
-            global $messageErr;
-            $insertBool1 = $insertBool2 = false;
-
-            if($_SERVER["REQUEST_METHOD"] == "POST"){
-                echo("test");
-                if($_POST['action'] == "load"){
-                    echo("Yeah!");
-                    load_entries();
-                } else {
-                    if(empty($_POST["name"])){
-                        $nameErr = "Please enter your name!";
-                    } else {
-                        $name = test_input($_POST["name"]);
-                        $insertBool1 = true;
-                    }
-                    if(empty($_POST["message"])){
-                        $messageErr = "Please enter your message!";  
-                    } else {
-                        $message = test_input($_POST["message"]);
-                        $insertBool2 = true;
-                    }
-                }
-            }
-
-            //adds input to database, if checking was successful
-            if($insertBool1 && $insertBool2){
-                $statement = $pdo->prepare("INSERT INTO guestbook_entries (name, message) VALUES (?, ?)");
-                $statement->execute(array($name, $message));
-                $name = $message = "";
-            }
-
-
-
-        } catch(PDOException $e){
-            echo "No database connection";
-        }
-
-
-        ?>
+        <?php include('backend.php'); ?>
 
         <nav id="nav">
             <ul>
@@ -136,23 +66,7 @@
 
 -->
 
-
-            <?php 
-            try {
-                global $amount_entries;
-                $sql = "SELECT * from guestbook_entries ORDER BY id DESC LIMIT $amount_entries";
-                foreach ($pdo->query($sql) as $row) {
-                    echo $row['id']." <br />";
-                    echo $row['name'].": <br />";    
-                    echo $row['message']."<br />";
-                    echo "posted on: ";
-                    echo $row['time']."<br />";
-                }
-            } catch(PDOException $e){
-
-            }
-
-            ?>
+            <?php include('print_entries.php'); ?>
 
             <br/>
             <!--
@@ -167,21 +81,8 @@
             <br>
             <br>
 
-            <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
-                <fieldset>
-                    Enter your Nickname:
-                    <br>
-                    <input type="text" name="name" id="textfield" value="<?php global $name; echo $name;?>" placeholder="Please enter your name!">
-                    <span id="error" style="color: red"> <?php global $nameErr; echo $nameErr; ?> </span>
-                    <br>
-                    Enter your message:
-                    <br>
-                    <textarea id="textarea" name="message" rows="10" value="<?php global $message; echo $message;?>" placeholder="Please enter your message!"></textarea>
-                    <br>
-                    <span id="error" style="color: red"> <?php global $messageErr; echo $messageErr; ?> </span>
-                    <input type="submit" id="submit">
-                </fieldset>
-            </form>
+            <?php include('form.php'); ?>
+
             <br>
             <hr>
 
