@@ -79,6 +79,11 @@ nav ul li a:visited {
     background-color: azure;
 }
 
+#number {
+    text-align: right;
+    border: 0 1 1 1;
+}
+
 #infos {
     text-align: center;
 }
@@ -101,15 +106,15 @@ fieldset {
 
 #textfield {
     border: 1px solid #000000;
-    border-radius: 8px;
-    margin: 10px;
+    border-radius: 5px;
+    margin: 10px 0px;
     font-family: inherit;
 }
 
 #textarea {
     border: 1px solid #000000;
     border-radius: 8px;
-    width: 100%;
+    width: 98.8%;
     font-family: inherit;
 }
 

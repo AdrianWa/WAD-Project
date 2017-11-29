@@ -9,20 +9,15 @@
         <link href="https://fonts.googleapis.com/css?family=Raleway|Roboto" rel="stylesheet">
         <!--  <script src="../ckeditor.js"></script>  -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-        <script type="text/javascript">
-            function myAjax(){
-                $.ajax({type : 'post',
-                        data : {'action': 'load'},
-                        url: 'backend.php',
-                        success: function(data){
-                        },
-                        error: function(data){
-                            alert("error");
-                        }
-                       });
-            }
 
-
+        <script>
+            $(document).ready(function(){
+                $("loading-button").click(function(){
+                    $.ajax({{
+                        alert("Nice!");
+                    }});
+                });
+            });
         </script>
     </head>
 
@@ -53,22 +48,12 @@
             <br>
             <hr>
 
+
             <h1 id="guestbook">My Guestbook</h1>
-
-
-            <!--
-
-<div id="template">
-<p>"Your message"!</p>
-<div id="infos">posted by NAME on DATE</div>
-</div>
-<br>
-
--->
 
             <?php include('print_entries.php'); ?>
 
-            <br/>
+            <br>
             <!--
 <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
 <input type="submit" id="loading-button" name="load" value="Load more!"/>
@@ -114,8 +99,10 @@ CKEDITOR.replace( 'editor1' );
 
         <div id="footer">Copyright &copy;</div>
 
+
         <?php
-        $pdo = null; //close database connection
+        //close database connection
+        $pdo = null; 
         ?>
 
     </body>
