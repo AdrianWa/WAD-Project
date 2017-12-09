@@ -5,7 +5,8 @@ use \Psr\Http\Message\ResponseInterface as Response;
 require '../vendor/autoload.php';
 require 'db_conn.php';
 
-$app = new Slim\App;
+$app = new \Slim\App;
+
 $app->get('/hello/{name}', function (Request $request, Response $response) {
     $name = $request->getAttribute('name');
     $response->getBody()->write("Hello, $name");
@@ -13,7 +14,7 @@ $app->get('/hello/{name}', function (Request $request, Response $response) {
     return $response;
 });
 
-// Customer Routes
+// Guestbook Entries Routes
 require 'api.php';
 
 $app->run();

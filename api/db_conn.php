@@ -12,6 +12,7 @@ class database{
     $mysql_connect_str = "mysql:host=$this->servername;dbname=$this->dbname";
     $pdo = new PDO($mysql_connect_str, $this->username, $this->password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC); 
     return $pdo;
   }
 
