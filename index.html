@@ -5,122 +5,101 @@
         <meta name="viewport" content="width=device-width, initial-scale = 1.0">
         <title> GUESTBOOK </title>
         <link rel="stylesheet"
-              href="stylesheet.css">
+              href="css/stylesheet.css">
         <link href="https://fonts.googleapis.com/css?family=Raleway|Roboto" rel="stylesheet">
-        <script src="../ckeditor.js"></script>
     </head>
-    
+
     <body>
-        
+
         <nav id="nav">
             <ul>
                 <li><a href="#top">Home</a></li>
                 <li><a href="#guestbook">The Guestbook</a></li>
                 <li><a href="#about">About</a></li>
             </ul>
-            
+
         </nav>
-        
+
         <img id="cover-picture" src="res/cover_pic.jpg" alt="Cover-Picture">
-        
-        
-    
+
+
+
         <div id=basis>
-            
+
             <h1 id="home">Home</h1>
-            
+
             <p> Welcome to my Website!</p>
-            <p> This site is currently under construction!</p>
-            <img src="res/under_construction1600.png" style="height: 200px; width: 200px;">
+            <p> Here you can read all entries of all the visitors before you!</p>
+            <p> If you want, leave a few nice words for all people who visit this site after you! </p>
             <br>
             <hr>
-            
+
+
             <h1 id="guestbook">My Guestbook</h1>
-        
-            
-            <div id="template">
-                <p>"Your message"!</p>
-                <div id="infos">posted by NAME on DATE</div>
-            </div>
+
+            <div id="entries_container"></div>
+
             <br>
-            
-            <div id="template">
-                <p>"Your message"!</p>
-                <div id="infos">posted by NAME on DATE</div>
-            </div>
-            <br>
-            
-            <div id="template">
-                <p>"Your message"!</p>
-                <div id="infos">posted by NAME on DATE</div>
-            </div>
-            <br>
-            
-            <div id="template">
-                <p>"Your message"!</p>
-                <div id="infos">posted by NAME on DATE</div>
-            </div>
-            <br>
-            
-            <div id="template">
-                <p>"Your message"!</p>
-                <div id="infos">posted by NAME on DATE</div>
-            </div>
-            <br>
-            
-            <button id="loading-button">
+
+            <button id="loading_button">
                 Load more!
             </button>
-            
+
             <br>
             <br>
             <br>
-            
-            <form method="post" action="action.php">
+
+            <form method="post" action="action.php" id="form">
                 <fieldset>
                     Enter your Nickname:
                     <br>
-                    <input type="text" id="textfield" >
+                    <input type="text" id="textfield" > <span id="textfield_error"></span>
                     <br>
                     Enter your message:
                     <br>
-                    <textarea id="textarea" rows="10">
-                    </textarea>
+                    <textarea id="textarea" rows="10"></textarea>
+                    <span id="textarea_error"></span>
                     <br>
-                    <input type="submit" id="submit">
+                    <input type="button" value="Submit!" id="submit">
                 </fieldset>
             </form>
             <br>
             <hr>
-            
+
+
             <h1 id="about">About</h1>
-            
-            <!--
-            <form>
-                <textarea name="editor1" id="editor1" rows="10" cols="100">
-                This is my textarea to be replaced with CKEditor.
-                </textarea>
-                <script>
-                // Replace the <textarea id="editor1"> with a CKEditor
-                // instance, using default configuration.
-                CKEDITOR.replace( 'editor1' );
-                </script>
-            </form>
-            -->
-            
-            <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum
-        
+
+            <p> This page was made for the Web Application Design Course at UPT. </p>
+
+            <p>It's backend was written in PHP using the Slim Framework. The data is stored in a SQL database.
+               The frontend was made with HTML and CSS, the data handling is done with XMLHttpRequests, the recieved JSON fills
+               a template using the JS framework Handlebars.
+
+
             </p>
-            
-            <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum
-        
-            </p>
-            
+
         </div>
-        
-        
+
+
         <div id="footer">Copyright &copy;</div>
-    
-    
+
+        <script id="entryTemplate" type="text/x-handlebars-template">
+          {{#each this}}
+            <div class="template">
+              <div class="number">
+                {{id}}
+              </div>
+              <b>{{name}}: </b> <br><br>
+              {{message}}<br>
+              <div class="infos">
+              posted on: {{time}}
+              </div>
+            </div>
+          <br>
+          {{/each}}
+        </script>
+
+        <script src="js/handlebars-v4.0.11.js"></script>
+        <script src="js/frontend.js"></script>
     </body>
 </html>

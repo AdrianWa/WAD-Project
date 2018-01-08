@@ -6,11 +6,7 @@ require '../vendor/autoload.php';
 
 $app = new \Slim\App;
 
-/*
-$app->options('/{routes:.+}', function ($request, $response, $args) {
-    return $response;
-});
-*/
+
 
 $app->add(function ($req, $res, $next) {
     $response = $next($req, $res);
@@ -93,4 +89,5 @@ function test_input($data) {
     $data = htmlspecialchars($data);
     return $data;
 }
+
 ?>
