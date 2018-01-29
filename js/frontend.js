@@ -16,6 +16,7 @@ submitBtn.addEventListener("click", submitForm);
 
 // execute always once
 getEntries();
+zenscroll.setup(null, 52);
 
 
 //on click functions
